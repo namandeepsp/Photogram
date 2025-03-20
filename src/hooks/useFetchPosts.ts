@@ -1,4 +1,3 @@
-import Layout from "@/components/layout";
 import { useUserAuth } from "@/context/userAuthContext";
 import { getPostsByUserId } from "@/repository/post.service";
 import { DocumentResponse, Post } from "@/types";

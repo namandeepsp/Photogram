@@ -1,15 +1,14 @@
 import Layout from "@/components/layout";
-import { useUserAuth } from "@/context/userAuthContext";
-import { IProfileResponse } from "@/types";
-import { FunctionComponent, useEffect, useState } from "react";
-import image2 from "../../assets/images/image2.jpg";
-import { Button } from "@/components/ui/button";
-import { Edit2Icon, HeartIcon } from "lucide-react";
-import MyPhotos from "../myPhotos";
-import useFetchPosts from "@/hooks/useFetchPosts";
 import Spinner from "@/components/loader";
-import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { useUserAuth } from "@/context/userAuthContext";
+import useFetchPosts from "@/hooks/useFetchPosts";
 import { getUserProfile } from "@/repository/user.service";
+import { IProfileResponse } from "@/types";
+import { Edit2Icon, HeartIcon } from "lucide-react";
+import { FunctionComponent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import image2 from "../../assets/images/image2.jpg";
 
 interface IProfileProps {}
 

@@ -1,19 +1,19 @@
-import Layout from "@/components/layout";
 import FileUploader from "@/components/fileUploader/FileUploader";
+import Layout from "@/components/layout";
 import Spinner from "@/components/loader";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { IProfileInfo, IUserProfile } from "@/types";
-import { Label } from "@radix-ui/react-label";
-import { FunctionComponent, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import image2 from "../../assets/images/image2.jpg";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useUserAuth } from "@/context/userAuthContext";
 import {
   createUserProfile,
   updateUserProfile,
 } from "@/repository/user.service";
-import { useUserAuth } from "@/context/userAuthContext";
+import { IProfileInfo, IUserProfile } from "@/types";
+import { Label } from "@radix-ui/react-label";
+import { FunctionComponent, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import image2 from "../../assets/images/image2.jpg";
 
 interface IEditProfileProps {}
 

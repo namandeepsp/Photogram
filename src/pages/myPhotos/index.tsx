@@ -1,11 +1,7 @@
 import Layout from "@/components/layout";
-import { useUserAuth } from "@/context/userAuthContext";
-import { getPostsByUserId } from "@/repository/post.service";
-import { DocumentResponse, Post } from "@/types";
-import { useEffect, useState } from "react";
-import { HeartIcon } from "lucide-react";
 import Spinner from "@/components/loader";
 import useFetchPosts from "@/hooks/useFetchPosts";
+import { HeartIcon } from "lucide-react";
 
 interface IMyPhotosProps {}
 

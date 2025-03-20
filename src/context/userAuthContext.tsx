@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../firebaseConfig";
+import { IProfileInfo } from "@/types";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -10,7 +9,8 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
-import { IProfileInfo } from "@/types";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { auth } from "../firebaseConfig";
 
 interface IUserAuthProviderProps {
   children: React.ReactNode;

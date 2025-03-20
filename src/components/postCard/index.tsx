@@ -1,5 +1,11 @@
+import image1 from "@/assets/images/image1.jpg";
+import { useUserAuth } from "@/context/userAuthContext";
+import { useUsers } from "@/context/UsersContext";
+import { cn } from "@/lib/utils";
+import { updateLikesOnPost } from "@/repository/post.service";
 import { DocumentResponse, LikesInfo } from "@/types";
-import { FunctionComponent, useEffect, useState } from "react";
+import { HeartIcon, MessageCircle } from "lucide-react";
+import { FunctionComponent, useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,12 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import image1 from "@/assets/images/image1.jpg";
-import { HeartIcon, MessageCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useUserAuth } from "@/context/userAuthContext";
-import { updateLikesOnPost } from "@/repository/post.service";
-import { useUsers } from "@/context/usersContext";
 
 interface IPostCardProps {
   data: DocumentResponse;

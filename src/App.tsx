@@ -1,8 +1,8 @@
 import * as React from "react";
 import { RouterProvider } from "react-router-dom";
-import router from "./routes";
 import { UserAuthProvider } from "./context/userAuthContext";
-import { UsersProvider } from "./context/usersContext";
+import { UsersProvider } from "./context/UsersContext";
+import router from "./routes";
 
 interface IAppProps {}
 

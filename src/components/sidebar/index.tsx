@@ -1,16 +1,16 @@
-import * as React from "react";
-import homeIcon from "@/assets/icons/home.svg";
 import addIcon from "@/assets/icons/add.svg";
 import directIcon from "@/assets/icons/direct.svg";
+import homeIcon from "@/assets/icons/home.svg";
 import logoutIcon from "@/assets/icons/logout.svg";
 import myphotoIcon from "@/assets/icons/myphotos.svg";
-import settingsIcon from "@/assets/icons/settings.svg";
 import notificationIcon from "@/assets/icons/notifications.svg";
 import profileIcon from "@/assets/icons/profile.svg";
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "../ui/button";
+import settingsIcon from "@/assets/icons/settings.svg";
 import { useUserAuth } from "@/context/userAuthContext";
+import { cn } from "@/lib/utils";
+import * as React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { buttonVariants } from "../ui/button";
 
 interface ISidebarProps {}
 

@@ -1,12 +1,12 @@
-import { useState, useRef, useCallback } from "react";
+import { FileEntry } from "@/types";
+import * as UC from "@uploadcare/file-uploader";
 import {
-  UploadCtxProvider,
   FileUploaderRegular,
   OutputFileEntry,
+  UploadCtxProvider,
 } from "@uploadcare/react-uploader";
-import * as UC from "@uploadcare/file-uploader";
 import "@uploadcare/react-uploader/core.css";
-import { FileEntry } from "@/types";
+import { useCallback, useRef, useState } from "react";
 import "./FileUploader.css";
 
 interface IFileUploaderProps {

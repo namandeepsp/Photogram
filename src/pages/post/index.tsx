@@ -1,4 +1,3 @@
-import CustomModal from "@/components/commonComponents/CustomModal";
 import FileUploader from "@/components/fileUploader/FileUploader";
 import Layout from "@/components/layout";
 import Spinner from "@/components/loader";

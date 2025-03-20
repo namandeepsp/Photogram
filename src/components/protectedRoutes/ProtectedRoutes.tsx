@@ -1,6 +1,6 @@
-import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import * as React from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 interface IProtectedRoutesProps {}

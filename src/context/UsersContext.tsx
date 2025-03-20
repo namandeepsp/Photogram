@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useEffect } from "react";
-import { IUserProfile } from "@/types";
 import { getAllUsers } from "@/repository/user.service";
+import { IUserProfile } from "@/types";
+import React, { createContext, useContext, useEffect } from "react";
+import { useUserAuth } from "./userAuthContext";
 
 interface IUserContext {
   users: IUserProfile[];
@@ -10,6 +11,7 @@ interface IUserContext {
 const UsersContext = createContext<IUserContext | null | undefined>(null);
 
 export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useUserAuth();
   const [users, setUsers] = React.useState<IUserProfile[]>([]);
   const [loading, setLoading] = React.useState(false);
 
@@ -28,7 +30,7 @@ export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     fetchAllUsers();
-  }, []);
+  }, [user?.displayName, user?.photoURL]);
 
   return (
     <UsersContext.Provider value={{ users, loading }}>

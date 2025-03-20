@@ -1,26 +1,23 @@
+import CommentCard from "@/components/Commentcard";
 import CustomModal from "@/components/commonComponents/CustomModal";
 import Layout from "@/components/layout";
 import Spinner from "@/components/loader";
 import PostCard from "@/components/postCard";
 import Stories from "@/components/stories";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserAuth } from "@/context/userAuthContext";
-import { getPosts } from "@/repository/post.service";
-import { DocumentResponse, IComment, ICommentResponse } from "@/types";
-import { Search } from "lucide-react";
-import { FunctionComponent, useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   createComment,
   deleteComment,
   getCommentsByPost,
-  updateComment,
   updateLikesOnComment,
 } from "@/repository/comment.service";
-import CommentCard from "@/components/Commentcard";
-import { useUsers } from "@/context/usersContext";
+import { getPosts } from "@/repository/post.service";
+import { DocumentResponse, IComment, ICommentResponse } from "@/types";
+import { Search, Send } from "lucide-react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 
 interface IHomeProps {}
 

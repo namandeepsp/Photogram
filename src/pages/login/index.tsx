@@ -1,4 +1,6 @@
-import * as React from "react";
+import LoginSignUpBG from "@/components/commonComponents/LoginSignUpBG";
+import Spinner from "@/components/loader";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,17 +11,11 @@ import {
 } from "@/components/ui/card";
 import { Icons } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@radix-ui/react-label";
-import { Link, useNavigate } from "react-router-dom";
-import { UserLogIn } from "@/types";
 import { useUserAuth } from "@/context/userAuthContext";
-import image1 from "@/assets/images/image1.jpg";
-import image2 from "@/assets/images/image2.jpg";
-import image3 from "@/assets/images/image3.jpg";
-import image4 from "@/assets/images/image4.jpg";
-import LoginSignUpBG from "@/components/commonComponents/LoginSignUpBG";
-import Spinner from "@/components/loader";
+import { UserLogIn } from "@/types";
+import { Label } from "@radix-ui/react-label";
+import * as React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface ILoginProps {}
 

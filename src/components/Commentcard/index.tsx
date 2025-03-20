@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { Heart, Trash2, MessageCircle, Pencil } from "lucide-react";
-import { Button } from "../ui/button";
-import Spinner from "../loader";
-import { Textarea } from "../ui/textarea";
-import { createComment, updateComment } from "@/repository/comment.service";
-import { Card, CardHeader, CardTitle } from "../ui/card";
 import image1 from "@/assets/images/image1.jpg";
-import { useUsers } from "@/context/usersContext";
+import { useUsers } from "@/context/UsersContext";
+import { createComment, updateComment } from "@/repository/comment.service";
+import { Heart, MessageCircle, Pencil, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import Spinner from "../loader";
+import { Button } from "../ui/button";
+import { CardTitle } from "../ui/card";
+import { Textarea } from "../ui/textarea";
 
 const CommentCard = ({
   id = "",
