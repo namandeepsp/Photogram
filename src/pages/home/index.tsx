@@ -1,4 +1,4 @@
-import CommentCard from "@/components/Commentcard";
+import CommentCard from "@/components/commentCard";
 import CustomModal from "@/components/commonComponents/CustomModal";
 import Layout from "@/components/layout";
 import Spinner from "@/components/loader";
@@ -17,12 +17,10 @@ import {
 import { getPosts } from "@/repository/post.service";
 import { DocumentResponse, IComment, ICommentResponse } from "@/types";
 import { Search, Send } from "lucide-react";
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-interface IHomeProps {}
-
-const Home: FunctionComponent<IHomeProps> = () => {
-  const { user } = useUserAuth();
+const Home = () => {
+  const { user } = useUserAuth() ?? {};
   const [data, setData] = useState<DocumentResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [commentsOpen, setCommentOpen] = useState(false);
@@ -31,18 +29,31 @@ const Home: FunctionComponent<IHomeProps> = () => {
   const [comments, setComments] = useState<ICommentResponse[]>([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [loadingCommentId, setLoadingCommentId] = useState("");
-  const [editCommentIds, setEditCommentIds] = useState([]);
-  const [replyCommentIds, setReplyCommentIds] = useState([]);
-  const [openReplyIds, setOpenReplyIds] = useState([]);
+  const [editCommentIds, setEditCommentIds] = useState<string[]>([]);
+  const [replyCommentIds, setReplyCommentIds] = useState<string[]>([]);
+  const [openReplyIds, setOpenReplyIds] = useState<string[]>([]);
   const commentTextareaRef = useRef(null);
 
   useEffect(() => {
     if (user !== null) {
       getAllPosts();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
+    const getAllCommentsForAPost = async () => {
+      if (!currentPostId) return;
+      try {
+        setCommentsLoading(true);
+        const postComments = await getCommentsByPost(currentPostId);
+        if (postComments?.length) setComments(postComments);
+        else setComments([]);
+      } catch (error) {
+        console.log("Error while fetching comments: ", error);
+      } finally {
+        setCommentsLoading(false);
+      }
+    };
     getAllCommentsForAPost();
   }, [currentPostId, comments?.length]);
 
@@ -58,25 +69,10 @@ const Home: FunctionComponent<IHomeProps> = () => {
     }
   };
 
-  const getAllCommentsForAPost = async () => {
-    if (!currentPostId) return;
-    try {
-      setCommentsLoading(true);
-      const postComments = await getCommentsByPost(currentPostId);
-      if (postComments?.length) setComments(postComments);
-      else setComments([]);
-    } catch (error) {
-      console.log("Error while fetching comments: ", error);
-    } finally {
-      setCommentsLoading(false);
-    }
-  };
-
   const renderPosts = () =>
     data?.map((item) => (
       <PostCard
         data={item}
-        setData={setData}
         key={item.id}
         setCommentOpen={setCommentOpen}
         setCurrentPostId={setCurrentPostId}
@@ -87,7 +83,7 @@ const Home: FunctionComponent<IHomeProps> = () => {
   const renderComments = () => {
     return comments
       .filter((comment) => !comment.parentCommentId)
-      ?.map(({ id, parentCommentId = null, text, likes, usersLiked }) => {
+      ?.map(({ id, text, likes, usersLiked }) => {
         const commentReplies = comments.filter(
           (comment) => comment.parentCommentId === id
         );
@@ -102,17 +98,28 @@ const Home: FunctionComponent<IHomeProps> = () => {
               userId={user?.uid}
               handleDelete={() => handleCommentDelete(id)}
               handleLike={() =>
-                handleCommentLike(id, !usersLiked?.includes(user?.uid))
+                handleCommentLike(
+                  id,
+                  !(user?.uid && usersLiked
+                    ? usersLiked?.includes(user?.uid || "")
+                    : false)
+                )
               }
-              handleEditComment={(e: React.MouseEvent<HTMLFormElement>) => {
+              handleEditComment={(
+                e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
+              ) => {
                 e.preventDefault();
                 handleCommentEdit(id);
               }}
-              handleCommentReply={(e: React.MouseEvent<HTMLFormElement>) => {
+              handleCommentReply={(
+                e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
+              ) => {
                 e.preventDefault();
                 handleCommentReply(id);
               }}
-              handleReplyEditCancel={(e: React.MouseEvent<HTMLFormElement>) => {
+              handleReplyEditCancel={(
+                e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
+              ) => {
                 e.preventDefault();
                 if (editCommentIds.includes(id)) {
                   setEditCommentIds((prev) => {
@@ -129,9 +136,13 @@ const Home: FunctionComponent<IHomeProps> = () => {
                   });
                 }
               }}
-              handleRepiesToggle={() => handleRepiesToggle(id)}
+              handleRepiesToggle={handleRepiesToggle}
               loading={loadingCommentId === id}
-              isLiked={usersLiked?.includes(user?.uid)}
+              isLiked={
+                user?.uid && usersLiked
+                  ? usersLiked?.includes(user?.uid || "")
+                  : false
+              }
               editCommentIds={editCommentIds}
               replyCommentIds={replyCommentIds}
               currentPostId={currentPostId}
@@ -139,6 +150,7 @@ const Home: FunctionComponent<IHomeProps> = () => {
               setEditCommentIds={setEditCommentIds}
               setReplyCommentIds={setReplyCommentIds}
               openReplyIds={openReplyIds}
+              isAReply={false}
             />
             {commentReplies?.length > 0 && openReplyIds.includes(id) && (
               <div className="ml-16">
@@ -156,23 +168,25 @@ const Home: FunctionComponent<IHomeProps> = () => {
                       handleLike={() =>
                         handleCommentLike(
                           reply.id,
-                          !reply.usersLiked?.includes(user?.uid)
+                          !(user?.uid && reply.usersLiked
+                            ? reply.usersLiked?.includes(user?.uid || "")
+                            : false)
                         )
                       }
                       handleEditComment={(
-                        e: React.MouseEvent<HTMLFormElement>
+                        e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
                       ) => {
                         e.preventDefault();
                         handleCommentEdit(reply.id);
                       }}
                       handleCommentReply={(
-                        e: React.MouseEvent<HTMLFormElement>
+                        e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
                       ) => {
                         e.preventDefault();
                         handleCommentReply(reply.id);
                       }}
                       handleReplyEditCancel={(
-                        e: React.MouseEvent<HTMLFormElement>
+                        e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
                       ) => {
                         e.preventDefault();
                         if (editCommentIds.includes(reply.id)) {
@@ -191,7 +205,11 @@ const Home: FunctionComponent<IHomeProps> = () => {
                         }
                       }}
                       loading={loadingCommentId === reply.id}
-                      isLiked={usersLiked?.includes(user?.uid)}
+                      isLiked={
+                        user?.uid
+                          ? reply.usersLiked?.includes(user?.uid)
+                          : false
+                      }
                       editCommentIds={editCommentIds}
                       replyCommentIds={replyCommentIds}
                       currentPostId={currentPostId}
@@ -199,6 +217,8 @@ const Home: FunctionComponent<IHomeProps> = () => {
                       setEditCommentIds={setEditCommentIds}
                       setReplyCommentIds={setReplyCommentIds}
                       isAReply={true}
+                      openReplyIds={openReplyIds}
+                      handleRepiesToggle={handleRepiesToggle}
                     />
                   );
                 })}
@@ -221,7 +241,7 @@ const Home: FunctionComponent<IHomeProps> = () => {
       setLoadingCommentId(commentId);
       setCommentsLoading(true);
       await deleteComment(commentId);
-      getAllCommentsForAPost();
+      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.log("Error happened while deleting comment!: ", error);
     } finally {
@@ -237,7 +257,7 @@ const Home: FunctionComponent<IHomeProps> = () => {
       const comment = comments.find((comment) => comment.id === commentId);
       if (!comment) return;
       const updatedUsersLiked =
-        comment?.usersLiked instanceof Array ? [...comment?.usersLiked] : [];
+        comment?.usersLiked instanceof Array ? [...comment.usersLiked!] : [];
       if (isLiked) updatedUsersLiked.push(user?.uid);
       else updatedUsersLiked.splice(updatedUsersLiked?.indexOf(user?.uid), 1);
       const updatedLikes = comment?.likes + (isLiked ? 1 : -1);
@@ -272,7 +292,7 @@ const Home: FunctionComponent<IHomeProps> = () => {
       if (editCommentIds.includes(commentId))
         setEditCommentIds((prev) => {
           const updatedArray = [...prev];
-          updatedArray.splice(prev.indexOf(editComment), 1);
+          updatedArray.splice(prev.indexOf(editComment.id), 1);
           return updatedArray;
         });
       else setEditCommentIds((prev) => [...prev, commentId]);
@@ -289,7 +309,7 @@ const Home: FunctionComponent<IHomeProps> = () => {
       if (replyCommentIds.includes(commentId))
         setReplyCommentIds((prev) => {
           const updatedArray = [...prev];
-          updatedArray.splice(prev.indexOf(replyComment), 1);
+          updatedArray.splice(prev.indexOf(replyComment.id), 1);
           return updatedArray;
         });
       else setReplyCommentIds((prev) => [...prev, commentId]);
@@ -339,7 +359,7 @@ const Home: FunctionComponent<IHomeProps> = () => {
     setEditCommentIds([]);
   };
 
-  const handleRepiesToggle = (commentId) => {
+  const handleRepiesToggle = (commentId: string) => {
     setOpenReplyIds((prev) => {
       const updatedOpenReplyIds = [...prev];
       const index = updatedOpenReplyIds.indexOf(commentId);

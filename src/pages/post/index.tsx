@@ -5,14 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserAuth } from "@/context/userAuthContext";
 import { createPost } from "@/repository/post.service";
-import { FileEntry, PhotoMeta, Post } from "@/types";
+import { FileEntry, Post } from "@/types";
 import { Label } from "@radix-ui/react-label";
-import { FunctionComponent, MouseEvent, useState } from "react";
+import { MouseEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface ICreatePostProps {}
-
-const CreatePost: FunctionComponent<ICreatePostProps> = () => {
+const CreatePost = () => {
   const navigate = useNavigate();
   const { user } = useUserAuth();
   const [fileEntry, setFileEntry] = useState<FileEntry>({
@@ -32,13 +30,13 @@ const CreatePost: FunctionComponent<ICreatePostProps> = () => {
     e.preventDefault();
     if (!fileEntry?.files?.length || user === null) return;
     setLoading(true);
-    const photoMeta: PhotoMeta[] = fileEntry.files.map(({ cdnUrl, uuid }) => ({
-      cdnUrl,
-      uuid,
+    const photoMeta = fileEntry.files.map(({ cdnUrl, uuid }) => ({
+      cdnUrl: cdnUrl || "",
+      uuid: uuid || "",
     }));
     const newPost = {
       ...post,
-      userId: user.uid,
+      userId: user.uid || "",
       photos: photoMeta,
     };
     try {
@@ -82,7 +80,7 @@ const CreatePost: FunctionComponent<ICreatePostProps> = () => {
                 </Label>
                 <FileUploader fileEntry={fileEntry} onChange={setFileEntry} />
               </div>
-              <Button className="mt-8 w-32" type="submit">
+              <Button className="mt-8 w-32 cursor-pointer" type="submit">
                 {loading ? <Spinner color="" /> : "Post"}
                 {loading ? "Loading..." : ""}
               </Button>

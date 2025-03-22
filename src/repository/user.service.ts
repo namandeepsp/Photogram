@@ -27,7 +27,7 @@ export const getUserProfile = async (userId: string) => {
       where("userId", "==", userId)
     );
     const querySnapShot = await getDocs(q);
-    let tempData: IProfileResponse = {};
+    let tempData: IProfileResponse | null = null;
     if (querySnapShot.size > 0) {
       querySnapShot.forEach((doc) => {
         const userData = doc.data() as IUserProfile;
@@ -38,12 +38,12 @@ export const getUserProfile = async (userId: string) => {
       });
       return tempData;
     } else {
-      console.log("No such document!");
       return tempData;
     }
   } catch (error) {
     console.log("Error while getting user: ", error);
   }
+  return null;
 };
 
 export const updateUserProfile = async (id: string, user: IUserProfile) => {
@@ -72,8 +72,6 @@ export const getAllUsers = async () => {
         tempArr.push(responseObj);
       });
       return tempArr;
-    } else {
-      console.log("No users found!");
     }
   } catch (error) {
     console.log("Error occured while getting all the users: ", error);

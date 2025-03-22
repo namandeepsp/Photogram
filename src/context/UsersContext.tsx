@@ -1,10 +1,10 @@
 import { getAllUsers } from "@/repository/user.service";
-import { IUserProfile } from "@/types";
+import { IProfileResponse } from "@/types";
 import React, { createContext, useContext, useEffect } from "react";
 import { useUserAuth } from "./userAuthContext";
 
 interface IUserContext {
-  users: IUserProfile[];
+  users: IProfileResponse[];
   loading: boolean;
 }
 
@@ -12,15 +12,16 @@ const UsersContext = createContext<IUserContext | null | undefined>(null);
 
 export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useUserAuth();
-  const [users, setUsers] = React.useState<IUserProfile[]>([]);
+  const [users, setUsers] = React.useState<IProfileResponse[]>([]);
   const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     const fetchAllUsers = async () => {
+      console.log("Fetch all user called...");
       try {
         setLoading(true);
         const fetchedUsers = await getAllUsers();
-        if (fetchAllUsers) {
+        if (fetchedUsers) {
           setUsers(fetchedUsers);
         }
       } catch (error) {
@@ -30,7 +31,7 @@ export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     fetchAllUsers();
-  }, [user?.displayName, user?.photoURL]);
+  }, [user?.photoURL, user?.displayName]);
 
   return (
     <UsersContext.Provider value={{ users, loading }}>

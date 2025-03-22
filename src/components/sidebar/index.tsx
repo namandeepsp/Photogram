@@ -8,11 +8,8 @@ import profileIcon from "@/assets/icons/profile.svg";
 import settingsIcon from "@/assets/icons/settings.svg";
 import { useUserAuth } from "@/context/userAuthContext";
 import { cn } from "@/lib/utils";
-import * as React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { buttonVariants } from "../ui/button";
-
-interface ISidebarProps {}
 
 const navItems = [
   {
@@ -52,7 +49,7 @@ const navItems = [
   },
 ];
 
-const Sidebar: React.FunctionComponent<ISidebarProps> = () => {
+const Sidebar = () => {
   const { pathname } = useLocation();
   const { logOut } = useUserAuth();
   return (

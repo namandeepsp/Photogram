@@ -6,24 +6,22 @@ import useFetchPosts from "@/hooks/useFetchPosts";
 import { getUserProfile } from "@/repository/user.service";
 import { IProfileResponse } from "@/types";
 import { Edit2Icon, HeartIcon } from "lucide-react";
-import { FunctionComponent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import image2 from "../../assets/images/image2.jpg";
 
-interface IProfileProps {}
-
-const Profile: FunctionComponent<IProfileProps> = () => {
+const Profile = () => {
   const navigate = useNavigate();
-  const { user } = useUserAuth();
+  const { user } = useUserAuth() ?? {};
   const initialUserInfo: IProfileResponse = {
     id: "",
-    userId: user?.uid,
+    userId: user?.uid || "",
     userBio: "Add here what defines or motivates you...",
     photoURL: user?.photoURL || "",
     displayName: user?.displayName || "Guest User",
   };
   const [userInfo, setUserInfo] = useState<IProfileResponse>(initialUserInfo);
-  const [loading, data] = useFetchPosts();
+  const { loading, data } = useFetchPosts();
 
   useEffect(() => {
     if (user) getUserProfileInfo(user?.uid);
@@ -53,7 +51,7 @@ const Profile: FunctionComponent<IProfileProps> = () => {
   };
 
   const getUserProfileInfo = async (userId: string) => {
-    const data: IProfileResponse = userId ? await getUserProfile(userId) : null;
+    const data = userId ? await getUserProfile(userId) : null;
     if (data && Object.keys(data)?.length > 0) setUserInfo(data);
   };
 

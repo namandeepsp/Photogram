@@ -16,7 +16,9 @@ const CustomModal = ({
   keepFooter = false,
 }: ICustomModalProps) => {
   const overlayRef = useRef(null);
-  const handleOverlayClick = (e: MouseEvent<HTMLElement>) => {
+  const handleOverlayClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     e.stopPropagation();
     if (overlayRef?.current === e.target) {
       onClose();

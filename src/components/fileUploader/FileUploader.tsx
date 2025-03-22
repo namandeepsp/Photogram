@@ -50,7 +50,12 @@ const FileUploader: React.FunctionComponent<IFileUploaderProps> = ({
     setUploadedFiles([]);
   };
 
-  const handleChangeEvent = (files) => {
+  const handleChangeEvent = (
+    files: UC.OutputCollectionState<
+      UC.OutputCollectionStatus,
+      "maybe-has-group"
+    >
+  ) => {
     setUploadedFiles([
       ...files.allEntries.filter((f) => f.status === "success"),
     ] as OutputFileEntry<"success">[]);

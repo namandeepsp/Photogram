@@ -3,9 +3,9 @@ import { useUserAuth } from "@/context/userAuthContext";
 import { useUsers } from "@/context/UsersContext";
 import { cn } from "@/lib/utils";
 import { updateLikesOnPost } from "@/repository/post.service";
-import { DocumentResponse, LikesInfo } from "@/types";
+import { DocumentResponse, ICommentResponse, LikesInfo } from "@/types";
 import { HeartIcon, MessageCircle } from "lucide-react";
-import { FunctionComponent, useState } from "react";
+import { Dispatch, FunctionComponent, SetStateAction, useState } from "react";
 import {
   Card,
   CardContent,
@@ -16,29 +16,27 @@ import {
 
 interface IPostCardProps {
   data: DocumentResponse;
-  setData: (e: any) => void;
-  setCommentOpen: (e: any) => void;
-  setCurrentPostId: (e: any) => void;
-  setComments: (e: any) => void;
+  setCommentOpen: Dispatch<SetStateAction<boolean>>;
+  setCurrentPostId: Dispatch<SetStateAction<string>>;
+  setComments: React.Dispatch<React.SetStateAction<ICommentResponse[]>>;
 }
 
 const PostCard: FunctionComponent<IPostCardProps> = ({
   data,
-  setData,
   setCommentOpen,
   setCurrentPostId,
   setComments,
 }) => {
-  const {
-    user: { uid },
-  } = useUserAuth();
-  const { users, loading: usersLoading } = useUsers();
+  const { user } = useUserAuth();
+  const uid = user?.uid; // Only used if user is not null
+  const { users } = useUsers();
   const [likesInfo, setLikesInfo] = useState<LikesInfo>({
     likes: data.likes,
-    isLiked: typeof uid === "string" ? data.userLikes.includes(uid) : false, // TODO: Fix this
+    isLiked: uid ? data.userLikes.includes(uid) : false, // TODO: Fix this
   });
 
-  const handleLike = async (isLiked) => {
+  const handleLike = async (isLiked: boolean) => {
+    if (!uid) return;
     const totalLikes = likesInfo.likes + (isLiked ? 1 : -1);
     const newUserLikes = [...data.userLikes];
     if (isLiked) {

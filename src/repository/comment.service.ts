@@ -38,8 +38,6 @@ export const getCommentsByPost = async (postId: string) => {
         tempArr.push(responseObj);
       });
       return tempArr;
-    } else {
-      console.log("No comments yet!");
     }
   } catch (error) {
     console.log("Error while fetching comments!", error);
@@ -72,7 +70,6 @@ export const deleteComment = async (id: string) => {
   const commentSnapshot = await getDoc(commentRef);
 
   if (!commentSnapshot.exists()) {
-    console.log(`Comment ${id} not found.`);
     return;
   }
 
@@ -96,5 +93,4 @@ export const deleteComment = async (id: string) => {
   }
   // Delete the main comment
   await deleteDoc(commentRef);
-  console.log(`Deleted comment ${id} and all its replies (if any).`);
 };

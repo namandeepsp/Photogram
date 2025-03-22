@@ -64,8 +64,8 @@ export const UserAuthProvider: React.FunctionComponent<
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) setUser(firebaseUser);
     });
     return unsubscribe;
   }, []);

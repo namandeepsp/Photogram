@@ -1,15 +1,14 @@
 import Layout from "@/components/layout";
 import Spinner from "@/components/loader";
 import useFetchPosts from "@/hooks/useFetchPosts";
+import { DocumentResponse } from "@/types";
 import { HeartIcon } from "lucide-react";
 
-interface IMyPhotosProps {}
-
-const MyPhotos: React.FunctionComponent<IMyPhotosProps> = () => {
-  const [loading, data] = useFetchPosts();
+const MyPhotos = () => {
+  const { loading, data } = useFetchPosts();
 
   const renderPosts = () => {
-    return data.map((post) => (
+    return data?.map((post: DocumentResponse) => (
       <div key={post?.photos[0]?.uuid} className="relative">
         <div className="group absolute transition-all duration-200 bg-transparent hover:bg-slate-950 hover:opacity-75 top-0 left-0 bottom-0 right-0 w-full h-full">
           <div className="flex justify-center items-center gap-2 w-full h-full">

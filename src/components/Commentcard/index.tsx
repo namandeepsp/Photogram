@@ -1,12 +1,44 @@
 import image1 from "@/assets/images/image1.jpg";
 import { useUsers } from "@/context/UsersContext";
 import { createComment, updateComment } from "@/repository/comment.service";
+import { IComment, ICommentResponse } from "@/types";
 import { Heart, MessageCircle, Pencil, Trash2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "../loader";
 import { Button } from "../ui/button";
 import { CardTitle } from "../ui/card";
 import { Textarea } from "../ui/textarea";
+
+interface ICommentCard {
+  id: string;
+  parentCommentId: string | null;
+  text: string;
+  likes: number;
+  usersLiked: string[];
+  userId: string | undefined;
+  handleDelete: () => void;
+  handleLike: () => void;
+  handleEditComment: (
+    e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
+  ) => void;
+  handleCommentReply: (
+    e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
+  ) => void;
+  handleReplyEditCancel: (
+    e: React.MouseEvent<HTMLFormElement | HTMLButtonElement>
+  ) => void;
+  handleRepiesToggle: (commentId: string) => void;
+  loading: boolean;
+  isLiked: boolean;
+  editCommentIds: string[];
+  replyCommentIds: string[];
+  currentPostId: string;
+  isAReply: boolean | undefined;
+  setComments: React.Dispatch<React.SetStateAction<ICommentResponse[]>>;
+  setEditCommentIds: React.Dispatch<React.SetStateAction<string[]>>;
+  setReplyCommentIds: React.Dispatch<React.SetStateAction<string[]>>;
+  openReplyIds: string[];
+}
 
 const CommentCard = ({
   id = "",
@@ -17,10 +49,10 @@ const CommentCard = ({
   userId = "",
   handleDelete = () => {},
   handleLike = () => {},
-  handleEditComment = (e: React.MouseEvent<HTMLFormElement>) => {},
-  handleCommentReply = (e: React.MouseEvent<HTMLFormElement>) => {},
-  handleReplyEditCancel = (e: React.MouseEvent<HTMLFormElement>) => {},
-  handleRepiesToggle = () => {},
+  handleEditComment = () => {},
+  handleCommentReply = () => {},
+  handleReplyEditCancel = () => {},
+  handleRepiesToggle,
   loading = false,
   isLiked = false,
   editCommentIds = [],
@@ -31,12 +63,10 @@ const CommentCard = ({
   setEditCommentIds,
   setReplyCommentIds,
   openReplyIds,
-}) => {
-  const { users, loading: usersLoading } = useUsers();
+}: ICommentCard) => {
+  const { users } = useUsers();
   const [replyText, setReplyText] = useState("");
   const [replyLoading, setReplyLoading] = useState(false);
-  const replyTextRef = useRef(null);
-
   const isEditing = editCommentIds.includes(id);
   const isReplying = replyCommentIds.includes(id);
 
@@ -44,27 +74,24 @@ const CommentCard = ({
   const userDetails = getUser();
 
   useEffect(() => {
-    if (!replyTextRef?.current) return;
-    replyTextRef.current.focus();
-  }, [replyTextRef?.current]);
-
-  useEffect(() => {
     if (isEditing) setReplyText(text);
     if (isReplying) setReplyText("");
-  }, [isEditing, isReplying]);
+  }, [isEditing, isReplying, text]);
 
   const handleReplyKeydown = (
-    e: React.KeyboardEvent<HTMLFormElement>,
-    commentId
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+    commentId: string
   ) => {
     if (e.ctrlKey && e.key === "Enter") {
-      handleUserReply(e, id);
+      handleUserReply(e, commentId);
     }
   };
 
   const handleUserReply = async (
-    e: React.MouseEvent<HTMLFormElement> | React.KeyboardEvent<HTMLFormElement>,
-    commentId
+    e:
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.KeyboardEvent<HTMLTextAreaElement>,
+    commentId: string
   ) => {
     e.preventDefault();
     if (!parentCommentId || !commentId) return;
@@ -139,23 +166,17 @@ const CommentCard = ({
           <span>{userDetails?.displayName || "Guest User"}</span>
         </CardTitle>
       </div>
-      <div className="flex gap-3 px-4 py-2 border-b border-gray-200 items-center relative">
+      <div className="flex gap-3 px-4 py-1 border-b border-gray-200 items-center relative">
         {loading && (
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <Spinner />
           </div>
         )}
-        {/* Profile Image */}
-        {/* <img
-          src="https://i.pravatar.cc/40"
-          alt="Profile"
-          className="w-10 h-10 rounded-full"
-        /> */}
 
         {/* Comment Content */}
-        <div className="flex-1">
+        <div className="flex-1  ml-12">
           {/* <p className="font-semibold text-sm">{username}</p> */}
-          <p className="text-gray-700 text-sm ml-4">{text}</p>
+          <p className="text-gray-700 text-sm">{text}</p>
 
           {/* Bottom Actions */}
           <div className="flex justify-between mt-2 text-gray-500 text-xs">
@@ -167,7 +188,7 @@ const CommentCard = ({
                 }`}
               >
                 <Pencil size={14} />
-                Edit
+                Save
               </Button>
               <Button
                 onClick={handleDelete}
@@ -187,7 +208,7 @@ const CommentCard = ({
               </Button>
               {!isAReply && (
                 <Button
-                  onClick={handleRepiesToggle}
+                  onClick={() => handleRepiesToggle(id)}
                   className={`bg-transparent! hover:text-blue-500 flex items-center gap-1 p-0! cursor-pointer ${
                     openReplyIds.includes(id) ? "text-blue-500" : "text-black"
                   }`}
@@ -231,7 +252,6 @@ const CommentCard = ({
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
             onKeyDown={(e) => handleReplyKeydown(e, id)}
-            ref={replyTextRef}
             className="text-lg! text-gray-500 rounded-none! border-0 border-b-2 border-gray-950 resize-none field-sizing-content h-fit min-h-fit box-shadow-none px-2! py-0!"
           />
           <div className="flex justify-start items-center gap-4">

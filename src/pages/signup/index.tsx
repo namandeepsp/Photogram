@@ -17,15 +17,13 @@ import { Label } from "@radix-ui/react-label";
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-interface ISignupProps {}
-
 const intialValue: UserSignIn = {
   email: "",
   password: "",
   confirmPassword: "",
 };
 
-const Signup: React.FunctionComponent<ISignupProps> = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const { googleSignIn, signUp } = useUserAuth();
   const [userInfo, setUserInfo] = React.useState<UserSignIn>(intialValue);
@@ -84,6 +82,7 @@ const Signup: React.FunctionComponent<ISignupProps> = () => {
                 Enter your email below to create your account
               </CardDescription>
               <Button
+                type="button"
                 className="cursor-pointer"
                 variant="outline"
                 onClick={handleGoogleSignIn}

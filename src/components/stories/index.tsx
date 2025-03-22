@@ -5,47 +5,44 @@ import image4 from "@/assets/images/image4.jpg";
 import image5 from "@/assets/images/image5.jpg";
 import image6 from "@/assets/images/image6.jpg";
 import image7 from "@/assets/images/image7.jpg";
-import * as React from "react";
 
-interface IStoriesProps {}
-
-const Stories: React.FunctionComponent<IStoriesProps> = () => {
+const Stories = () => {
   return (
     <div className="flex justify-between">
       <img
         src={image1}
         alt="story image"
-        className="w-20 h-20 rounded-full border-4 border-slate-800 object-cover"
+        className="w-10 h-10 lg:w-20 lg:h-20 rounded-full border-4 border-slate-800 object-cover"
       />
       <img
         src={image2}
         alt="story image"
-        className="w-20 h-20 rounded-full border-4 border-slate-800 object-cover"
+        className="w-10 h-10 lg:w-20 lg:h-20 rounded-full border-4 border-slate-800 object-cover"
       />
       <img
         src={image3}
         alt="story image"
-        className="w-20 h-20 rounded-full border-4 border-slate-800 object-cover"
+        className="w-10 h-10 lg:w-20 lg:h-20 rounded-full border-4 border-slate-800 object-cover"
       />
       <img
         src={image4}
         alt="story image"
-        className="w-20 h-20 rounded-full border-4 border-slate-800 object-cover"
+        className="w-10 h-10 lg:w-20 lg:h-20 rounded-full border-4 border-slate-800 object-cover"
       />
       <img
         src={image5}
         alt="story image"
-        className="w-20 h-20 rounded-full border-4 border-slate-800 object-cover"
+        className="w-10 h-10 lg:w-20 lg:h-20 rounded-full border-4 border-slate-800 object-cover"
       />
       <img
         src={image6}
         alt="story image"
-        className="w-20 h-20 rounded-full border-4 border-slate-800 object-cover"
+        className="w-10 h-10 lg:w-20 lg:h-20 rounded-full border-4 border-slate-800 object-cover"
       />
       <img
         src={image7}
         alt="story image"
-        className="w-20 h-20 rounded-full border-4 border-slate-800 object-cover"
+        className="w-10 h-10 lg:w-20 lg:h-20 rounded-full border-4 border-slate-800 object-cover"
       />
     </div>
   );

@@ -20,7 +20,7 @@ export interface Post {
   caption: string;
   photos: PhotoMeta[];
   likes: number;
-  userLikes: [];
+  userLikes: string[];
   userId: string | null;
   date: Date;
 }
@@ -60,7 +60,7 @@ export interface IComment {
   parentCommentId: string | null;
   postId: string;
   text: string;
-  usersLiked: [];
+  usersLiked: string[];
   likes: number;
   createdAt: Date;
   updatedAt: Date;

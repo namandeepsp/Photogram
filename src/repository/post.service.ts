@@ -34,8 +34,6 @@ export const getPosts = async () => {
         tempArr.push(responseObj);
       });
       return tempArr;
-    } else {
-      console.log("No posts found!");
     }
   } catch (error) {
     console.log("Error while fetching posts!", error);

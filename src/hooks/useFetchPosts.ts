@@ -28,8 +28,6 @@ const useFetchPosts = () => {
           tempArr.push(responseObj);
           setData(tempArr);
         });
-      } else {
-        console.log("No documents found");
       }
     } catch (error) {
       console.log("Error while fetching your posts: ", error);
@@ -38,7 +36,7 @@ const useFetchPosts = () => {
     }
   };
 
-  return [loading, data];
+  return { loading, data };
 };
 
 export default useFetchPosts;

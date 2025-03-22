@@ -17,14 +17,12 @@ import { Label } from "@radix-ui/react-label";
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-interface ILoginProps {}
-
 const intialValue: UserLogIn = {
   email: "",
   password: "",
 };
 
-const Login: React.FunctionComponent<ILoginProps> = () => {
+const Login = () => {
   const navigate = useNavigate();
   const { googleSignIn, logIn } = useUserAuth();
   const [userLogInInfo, setUserLogInInfo] =
@@ -79,6 +77,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             <div className="grid gap-2">
               <CardDescription>Sign In using Google</CardDescription>
               <Button
+                type="button"
                 className="cursor-pointer"
                 variant="outline"
                 onClick={handleGoogleLogIn}

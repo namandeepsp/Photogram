@@ -9,15 +9,13 @@ import {
   createUserProfile,
   updateUserProfile,
 } from "@/repository/user.service";
-import { IProfileInfo, IUserProfile } from "@/types";
+import { FileEntry, IProfileInfo, IUserProfile } from "@/types";
 import { Label } from "@radix-ui/react-label";
-import { FunctionComponent, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import image2 from "../../assets/images/image2.jpg";
 
-interface IEditProfileProps {}
-
-const EditProfile: FunctionComponent<IEditProfileProps> = (props) => {
+const EditProfile = () => {
   const { user, updateProfileInfo } = useUserAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,7 +30,7 @@ const EditProfile: FunctionComponent<IEditProfileProps> = (props) => {
   const [fileEntry, setFileEntry] = useState<FileEntry>({
     files: [],
   });
-  const updateProfile = async (e: MouseEvent<HTMLFormElement>) => {
+  const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
@@ -128,7 +126,7 @@ const EditProfile: FunctionComponent<IEditProfileProps> = (props) => {
               </div>
               <div className="flex flex-row justify-center items-center">
                 <Button
-                  className="mt-8 w-32 mr-8"
+                  className="mt-8 w-32 mr-8 cursor-pointer"
                   type="submit"
                   onClick={() => navigate("/profile")}
                 >
@@ -136,7 +134,7 @@ const EditProfile: FunctionComponent<IEditProfileProps> = (props) => {
                 </Button>
                 <Button
                   variant="destructive"
-                  className="mt-8 w-32 mr-8"
+                  className="mt-8 w-32 mr-8 cursor-pointer"
                   type="submit"
                 >
                   {loading ? <Spinner /> : ""}
